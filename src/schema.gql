@@ -1,0 +1,95 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Supplier {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type BaseResponse {
+  ok: Boolean!
+  error: String
+}
+
+type CategoriesDTOResponse {
+  id: String!
+  name: String!
+  description: String!
+  isActive: Boolean!
+}
+
+type CategoriesResponse {
+  ok: Boolean!
+  error: String
+  data: [CategoriesDTOResponse!]
+}
+
+type CategoryResponse {
+  ok: Boolean!
+  error: String
+  data: CategoriesDTOResponse
+}
+
+type Query {
+  product(id: Int!): Product!
+  supplier(id: Int!): Supplier!
+  listCategories: CategoriesResponse!
+  getCategory(id: String!): CategoryResponse!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createSupplier(createSupplierInput: CreateSupplierInput!): Supplier!
+  updateSupplier(updateSupplierInput: UpdateSupplierInput!): Supplier!
+  removeSupplier(id: Int!): Supplier!
+  addNewCategory(payload: CreateCategoryInput!): BaseResponse!
+  updateCategory(input: UpdateCategoryArgs!): BaseResponse!
+  removeCategory(id: String!): BaseResponse!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateSupplierInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSupplierInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String!
+  isActive: Boolean!
+}
+
+input UpdateCategoryArgs {
+  id: String!
+  data: UpdateCategoryInput!
+}
+
+input UpdateCategoryInput {
+  name: String
+  description: String
+  isActive: Boolean
+}

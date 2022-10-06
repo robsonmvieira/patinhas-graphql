@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  patinhas-db:
+    image: postgres
+    container_name: patinhasDb
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=patinhasAdminDb
+    volumes:
+      - pgdata:/data/postgres
+
+  # app:
+  #   build: .
+  #   container_name: product-microservice-gas
+  #   ports:
+  #     - 8005:8005
+  #   restart: always
+  #   volumes:
+  #     - .:/usr/app
+  #   command: sh -c "npm run typeorm migration:run && npm run dev"
+  #   network_mode: host
+  #   depends_on:
+  #     - database_product_apple_supermarket
+
+volumes:
+  pgdata:
