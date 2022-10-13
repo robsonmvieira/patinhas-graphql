@@ -1,13 +1,15 @@
 import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { BaseResponse } from 'src/shared/dtos/base.response'
-import { CategoryModel } from '../entities/category.model'
+import { CategoryModel } from '../../entities'
 
 @ObjectType()
 export class CategoriesDTOResponse extends PickType(CategoryModel, [
   'id',
   'name',
   'description',
-  'isActive'
+  'isActive',
+  'products',
+  'suppliers'
 ] as const) {}
 
 @ObjectType()

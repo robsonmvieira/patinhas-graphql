@@ -1,35 +1,87 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { SupplierService } from './supplier.service';
-import { Supplier } from './entities/supplier.entity';
-import { CreateSupplierInput } from './dto/create-supplier.input';
-import { UpdateSupplierInput } from './dto/update-supplier.input';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import { SupplierService } from './supplier.service'
+import { Supplier } from './entities/supplier.entity'
+
+import {
+  CreateSupplierInput,
+  SupplierResponse,
+  SuppliersResponse,
+  UpdateSupplierArgs
+} from './dto'
+import { BaseResponse } from 'src/shared/dtos'
+
+import { UniqueID } from 'src/core/value-objects'
 
 @Resolver(() => Supplier)
 export class SupplierResolver {
-  constructor(private readonly supplierService: SupplierService) {}
+  constructor(private supplierService: SupplierService) {}
 
-  @Mutation(() => Supplier)
-  createSupplier(@Args('createSupplierInput') createSupplierInput: CreateSupplierInput) {
-    return this.supplierService.create(createSupplierInput);
+  @Mutation(() => BaseResponse, { name: 'newSupplier' })
+  async createSupplier(
+    @Args('data') createSupplierInput: CreateSupplierInput
+  ): Promise<BaseResponse> {
+    try {
+      const supplier = Supplier.create(createSupplierInput).getResult().toJSON()
+      const { ok, error } = await this.supplierService.create(supplier)
+      return { ok, error }
+    } catch (error) {
+      return { ok: false, error: error.message }
+    }
   }
 
-  @Query(() => [Supplier], { name: 'supplier' })
-  findAll() {
-    return this.supplierService.findAll();
+  @Query(() => SuppliersResponse, { name: 'suppliers' })
+  async findAll(): Promise<SuppliersResponse> {
+    try {
+      const { ok, error, data } = await this.supplierService.findAll()
+      return { ok, error, data }
+    } catch (error) {
+      return { ok: false, error: error.message }
+    }
   }
 
-  @Query(() => Supplier, { name: 'supplier' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.supplierService.findOne(id);
+  @Query(() => SupplierResponse, { name: 'getSupplier' })
+  async findOne(
+    @Args('id', { type: () => String }) id: string
+  ): Promise<SupplierResponse> {
+    try {
+      const { ok, error, data } = await this.supplierService.findOne(id)
+      return { ok, error, data }
+    } catch (error) {
+      return { ok: false, error: error.message }
+    }
   }
 
-  @Mutation(() => Supplier)
-  updateSupplier(@Args('updateSupplierInput') updateSupplierInput: UpdateSupplierInput) {
-    return this.supplierService.update(updateSupplierInput.id, updateSupplierInput);
+  @Mutation(() => BaseResponse)
+  async updateSupplier(
+    @Args('data') updateSupplierInput: UpdateSupplierArgs
+  ): Promise<BaseResponse> {
+    try {
+      const { id } = updateSupplierInput
+      const { data } = await this.supplierService.findOne(id)
+      const newPayload = Object.assign(data, updateSupplierInput.data)
+      const supplier = Supplier.create(newPayload, new UniqueID(id))
+        .getResult()
+        .toJSON()
+      // console.log('supplier => ', supplier)
+      const { ok, error } = await this.supplierService.update(
+        updateSupplierInput.id,
+        supplier
+      )
+      return { ok, error }
+    } catch (error) {
+      return { ok: false, error: error.message }
+    }
   }
 
-  @Mutation(() => Supplier)
-  removeSupplier(@Args('id', { type: () => Int }) id: number) {
-    return this.supplierService.remove(id);
+  @Mutation(() => BaseResponse)
+  async removeSupplier(
+    @Args('id', { type: () => String }) id: string
+  ): Promise<BaseResponse> {
+    try {
+      const { ok, error } = await this.supplierService.remove(id)
+      return { ok, error }
+    } catch (error) {
+      return { ok: false, error: error.message }
+    }
   }
 }

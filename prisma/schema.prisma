@@ -11,8 +11,57 @@ datasource db {
 }
 
 model Category {
-  id          String  @id
-  name        String  @unique
+  id          String     @id
+  name        String     @unique
   description String?
   isActive    Boolean
+  products    Product[]
+  suppliers   Supplier[]
+}
+
+model Product {
+  price         Float
+  currentPrice  Float
+  quantity      Float
+  id            String   @id
+  title         String   @unique
+  categoryId    String
+  sku           String
+  barCode       String
+  brand         String
+  color         String
+  extraInfo     String
+  technicalInfo String
+  isPrime       Boolean
+  isActive      Boolean
+  images        String[]
+
+  fromPrice                      Float?
+  portsNumber                    Float?
+  description                    String?
+  supplierId                     String?
+  capacity                       String?
+  voltage                        String?
+  betterPriceFromBeforeLastMonth Boolean
+
+  category Category  @relation(fields: [categoryId], references: [id])
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+}
+
+model Supplier {
+  id         String    @id
+  name       String    @unique
+  email      String    @unique
+  address    String
+  extraInfo  String
+  cnpj       String
+  categoryId String
+  isActive   Boolean
+  isBlocked  Boolean
+  phone      String[]
+  products   Product[]
+
+  description String?
+
+  category Category @relation(fields: [categoryId], references: [id])
 }

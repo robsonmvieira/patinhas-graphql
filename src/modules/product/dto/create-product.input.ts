@@ -1,7 +1,9 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, OmitType } from '@nestjs/graphql'
+import { ProductModel } from '../entities'
 
 @InputType()
-export class CreateProductInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
-}
+export class CreateProductInput extends OmitType(
+  ProductModel,
+  ['id', 'createdAt', 'updatedAt', 'category', 'supplier'],
+  InputType
+) {}
