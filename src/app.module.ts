@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.dev'],
+      envFilePath: ['.env', '.env.dev'],
       isGlobal: true
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -23,7 +23,7 @@ import { ConfigModule } from '@nestjs/config'
     SupplierModule,
     CategoryModule
   ],
-  controllers: [],
+
   providers: []
 })
 export class AppModule {}

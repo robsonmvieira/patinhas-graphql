@@ -2,14 +2,64 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Product {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type SupplierModel {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  logo: String!
+  isActive: Boolean!
+  email: String!
+  phones: String!
+  isBlocked: Boolean!
+  cnpj: String!
+  address: String!
+  extraInfo: String
+  products: [ProductModel!]
+  category: CategoryModel
+  categoryId: String!
 }
 
-type Supplier {
-  """Example field (placeholder)"""
-  exampleField: Int!
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CategoryModel {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  isActive: Boolean!
+  products: [ProductModel!]!
+  suppliers: [SupplierModel!]!
+}
+
+type ProductModel {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  isActive: Boolean!
+  sku: String!
+  barCode: String!
+  price: Float!
+  currentPrice: Float!
+  quantity: Float!
+  brand: String!
+  description: String!
+  category: CategoryModel!
+  supplier: SupplierModel!
+  supplierId: String!
+  categoryId: String!
+  images: String!
+  extraInfo: String!
+  color: String!
+  betterPriceFromBeforeLastMonth: Boolean!
+  isPrime: Boolean!
+  technicalInfo: String!
 }
 
 type BaseResponse {
@@ -17,11 +67,78 @@ type BaseResponse {
   error: String
 }
 
+type ProductsDTOResponse {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  isActive: Boolean!
+  sku: String!
+  barCode: String!
+  price: Float!
+  currentPrice: Float!
+  quantity: Float!
+  brand: String!
+  description: String!
+  category: CategoryModel!
+  supplier: SupplierModel!
+  supplierId: String!
+  categoryId: String!
+  images: String!
+  extraInfo: String!
+  color: String!
+  betterPriceFromBeforeLastMonth: Boolean!
+  isPrime: Boolean!
+  technicalInfo: String!
+}
+
+type ProductsResponse {
+  ok: Boolean!
+  error: String
+  data: [ProductsDTOResponse!]
+}
+
+type ProductResponse {
+  ok: Boolean!
+  error: String
+  data: ProductsDTOResponse
+}
+
+type SuppliersDTOResponse {
+  id: String!
+  name: String!
+  description: String!
+  logo: String!
+  isActive: Boolean!
+  email: String!
+  phones: String!
+  isBlocked: Boolean!
+  cnpj: String!
+  address: String!
+  extraInfo: String
+  products: [ProductModel!]
+  category: CategoryModel
+}
+
+type SuppliersResponse {
+  ok: Boolean!
+  error: String
+  data: [SuppliersDTOResponse!]
+}
+
+type SupplierResponse {
+  ok: Boolean!
+  error: String
+  data: SuppliersDTOResponse
+}
+
 type CategoriesDTOResponse {
   id: String!
   name: String!
   description: String!
   isActive: Boolean!
+  products: [ProductModel!]!
+  suppliers: [SupplierModel!]!
 }
 
 type CategoriesResponse {
@@ -37,44 +154,96 @@ type CategoryResponse {
 }
 
 type Query {
-  product(id: Int!): Product!
-  supplier(id: Int!): Supplier!
+  listProducts: ProductsResponse!
+  getProduct(id: String!): ProductResponse!
+  suppliers: SuppliersResponse!
+  getSupplier(id: String!): SupplierResponse!
   listCategories: CategoriesResponse!
   getCategory(id: String!): CategoryResponse!
 }
 
 type Mutation {
-  createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
-  createSupplier(createSupplierInput: CreateSupplierInput!): Supplier!
-  updateSupplier(updateSupplierInput: UpdateSupplierInput!): Supplier!
-  removeSupplier(id: Int!): Supplier!
+  createProduct(input: CreateProductInput!): BaseResponse!
+  updateProduct(updateProductInput: UpdateProductInput!): BaseResponse!
+  deleteProduct(id: Int!): BaseResponse!
+  newSupplier(data: CreateSupplierInput!): BaseResponse!
+  updateSupplier(data: UpdateSupplierArgs!): BaseResponse!
+  removeSupplier(id: String!): BaseResponse!
   addNewCategory(payload: CreateCategoryInput!): BaseResponse!
   updateCategory(input: UpdateCategoryArgs!): BaseResponse!
   removeCategory(id: String!): BaseResponse!
 }
 
 input CreateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  title: String!
+  isActive: Boolean!
+  sku: String!
+  barCode: String!
+  price: Float!
+  currentPrice: Float!
+  quantity: Float!
+  brand: String!
+  description: String!
+  supplierId: String!
+  categoryId: String!
+  images: String!
+  extraInfo: String!
+  color: String!
+  betterPriceFromBeforeLastMonth: Boolean!
+  isPrime: Boolean!
+  technicalInfo: String!
 }
 
 input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  title: String
+  isActive: Boolean
+  sku: String
+  barCode: String
+  price: Float
+  currentPrice: Float
+  quantity: Float
+  brand: String
+  description: String
+  supplierId: String
+  categoryId: String
+  images: String
+  extraInfo: String
+  color: String
+  betterPriceFromBeforeLastMonth: Boolean
+  isPrime: Boolean
+  technicalInfo: String
   id: Int!
 }
 
 input CreateSupplierInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  description: String!
+  isActive: Boolean!
+  email: String!
+  phones: String!
+  isBlocked: Boolean!
+  cnpj: String!
+  address: String!
+  extraInfo: String
+  categoryId: String!
+}
+
+input UpdateSupplierArgs {
+  id: String!
+  data: UpdateSupplierInput!
 }
 
 input UpdateSupplierInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String
+  description: String
+  isActive: Boolean
+  email: String
+  phones: String
+  isBlocked: Boolean
+  cnpj: String
+  address: String
+  extraInfo: String
+  categoryId: String
 }
 
 input CreateCategoryInput {

@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/shared/services/prisma.service'
 import { CreateCategoryPayload } from './dto/create-category.payload'
-import { UpdateCategoryArgs } from './dto'
-import { Category } from './entities'
 
 @Injectable()
 export class CategoryService {
@@ -38,9 +36,15 @@ export class CategoryService {
     }
   }
 
-  async findAll(): Promise<any> {
+  async findAll(): Promise<{ ok: boolean; error: string; data?: any }> {
     try {
-      const data = await this.prismaService.category.findMany()
+      const data = await this.prismaService.category.findMany({
+        include: {
+          products: true,
+          suppliers: true
+        }
+      })
+
       return { ok: true, error: null, data }
     } catch (error) {
       return {
@@ -55,7 +59,11 @@ export class CategoryService {
   ): Promise<{ ok: boolean; error: string; data?: any }> {
     try {
       const category = await this.prismaService.category.findUnique({
-        where: { id }
+        where: { id },
+        include: {
+          products: true,
+          suppliers: true
+        }
       })
 
       if (!category) {
