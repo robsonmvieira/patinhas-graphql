@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/shared/services/prisma.service'
 import { CreateSupplierDto } from './dto'
 
-// import { UpdateSupplierInput } from './dto/update-supplier.input'
-
 @Injectable()
 export class SupplierService {
   constructor(private prismaService: PrismaService) {}
@@ -13,7 +11,7 @@ export class SupplierService {
     error: string
   }> {
     try {
-      const category = await this.prismaService.supplier.create({
+      const supplier = await this.prismaService.supplier.create({
         data: {
           id: payload.id,
           name: payload.name,
@@ -36,7 +34,7 @@ export class SupplierService {
         }
       })
 
-      if (!category) {
+      if (!supplier) {
         return {
           ok: false,
           error: 'Supplier not created'
@@ -103,7 +101,7 @@ export class SupplierService {
     payload: CreateSupplierDto
   ): Promise<{ ok: boolean; error: string; data?: any }> {
     try {
-      const category = await this.prismaService.supplier.update({
+      const supplier = await this.prismaService.supplier.update({
         where: { id },
         data: {
           id: payload.id,
@@ -127,7 +125,7 @@ export class SupplierService {
         }
       })
 
-      if (!category) {
+      if (!supplier) {
         return {
           ok: false,
           error: 'Category not updated'
@@ -137,7 +135,7 @@ export class SupplierService {
       return {
         ok: true,
         error: null,
-        data: category
+        data: supplier
       }
     } catch (error) {
       return { ok: false, error: error.message }
@@ -148,11 +146,11 @@ export class SupplierService {
     id: string
   ): Promise<{ ok: boolean; error: string; code?: number }> {
     try {
-      const category = await this.prismaService.supplier.delete({
+      const supplier = await this.prismaService.supplier.delete({
         where: { id }
       })
 
-      if (!category) {
+      if (!supplier) {
         return {
           ok: false,
           error: 'Supplier not deleted',
