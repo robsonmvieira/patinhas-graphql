@@ -8,6 +8,7 @@ import { SupplierModule } from './modules/supplier/supplier.module'
 import { CategoryModule } from './modules/category/category.module'
 
 import { ConfigModule } from '@nestjs/config'
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ConfigModule } from '@nestjs/config'
     }),
     ProductModule,
     SupplierModule,
-    CategoryModule
+    CategoryModule,
+    UserModule
   ],
 
   providers: []
