@@ -153,6 +153,41 @@ type CategoryResponse {
   data: CategoriesDTOResponse
 }
 
+type UsersDTOResponse {
+  id: String!
+  name: String!
+  email: String!
+  avatar: String
+  role: role!
+}
+
+enum role {
+  ADMIN
+  SUPER_ADMIN
+  SUPPLIER
+  CUSTOMER
+  MANAGER
+  ASSISTANT
+}
+
+type UsersResponse {
+  ok: Boolean!
+  error: String
+  data: [UsersDTOResponse!]
+}
+
+type UserResponse {
+  ok: Boolean!
+  error: String
+  data: UsersDTOResponse
+}
+
+type LoginOutput {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
 type Query {
   listProducts: ProductsResponse!
   getProduct(id: String!): ProductResponse!
@@ -160,6 +195,8 @@ type Query {
   getSupplier(id: String!): SupplierResponse!
   listCategories: CategoriesResponse!
   getCategory(id: String!): CategoryResponse!
+  users: UsersResponse!
+  getUser(id: String!): UserResponse!
 }
 
 type Mutation {
@@ -172,6 +209,9 @@ type Mutation {
   addNewCategory(payload: CreateCategoryInput!): BaseResponse!
   updateCategory(input: UpdateCategoryArgs!): BaseResponse!
   removeCategory(id: String!): BaseResponse!
+  createUser(input: CreateUserDto!): BaseResponse!
+  removeUser(id: String!): BaseResponse!
+  login(input: LoginDto!): LoginOutput!
 }
 
 input CreateProductInput {
@@ -261,4 +301,18 @@ input UpdateCategoryInput {
   name: String
   description: String
   isActive: Boolean
+}
+
+input CreateUserDto {
+  name: String!
+  password: String!
+  email: String!
+  avatar: String
+  role: role!
+  confirmPassword: String!
+}
+
+input LoginDto {
+  password: String!
+  email: String!
 }

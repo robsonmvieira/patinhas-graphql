@@ -1,3 +1,17 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'SUPER_ADMIN', 'SUPPLIER', 'CUSTOMER', 'MANAGER', 'ASSISTANT');
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'CUSTOMER',
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
@@ -17,11 +31,11 @@ CREATE TABLE "Product" (
     "title" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "sku" TEXT NOT NULL,
-    "barCode" TEXT NOT NULL,
+    "barCode" TEXT,
     "brand" TEXT NOT NULL,
-    "color" TEXT NOT NULL,
-    "extraInfo" TEXT NOT NULL,
-    "technicalInfo" TEXT NOT NULL,
+    "colors" TEXT,
+    "extraInfo" TEXT,
+    "technicalInfo" TEXT,
     "isPrime" BOOLEAN NOT NULL,
     "isActive" BOOLEAN NOT NULL,
     "images" TEXT[],
@@ -42,7 +56,7 @@ CREATE TABLE "Supplier" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "address" TEXT NOT NULL,
-    "extraInfo" TEXT NOT NULL,
+    "extraInfo" TEXT,
     "cnpj" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
@@ -52,6 +66,12 @@ CREATE TABLE "Supplier" (
 
     CONSTRAINT "Supplier_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");

@@ -10,6 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  SUPPLIER
+  CUSTOMER
+  MANAGER
+  ASSISTANT
+}
+
+model User {
+  id       String @id
+  name     String @unique
+  email    String @unique
+  password String
+  role     Role   @default(CUSTOMER)
+}
+
 model Category {
   id          String     @id
   name        String     @unique
@@ -27,11 +44,11 @@ model Product {
   title         String   @unique
   categoryId    String
   sku           String
-  barCode       String
+  barCode       String?
   brand         String
-  color         String
-  extraInfo     String
-  technicalInfo String
+  colors        String?
+  extraInfo     String?
+  technicalInfo String?
   isPrime       Boolean
   isActive      Boolean
   images        String[]
@@ -53,7 +70,7 @@ model Supplier {
   name       String    @unique
   email      String    @unique
   address    String
-  extraInfo  String
+  extraInfo  String?
   cnpj       String
   categoryId String
   isActive   Boolean

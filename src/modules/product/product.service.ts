@@ -26,7 +26,7 @@ export class ProductService {
           currentPrice: payload.currentPrice,
           quantity: payload.quantity,
           brand: payload.brand,
-          color: payload.color,
+          colors: payload.color,
           isPrime: payload.isPrime,
           images: payload.images,
           betterPriceFromBeforeLastMonth:
