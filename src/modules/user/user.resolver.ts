@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql'
+import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql'
 import { UserService } from './user.service'
 import { User } from './entities/user.entity'
 
@@ -13,6 +13,8 @@ import {
 
 import * as bcript from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
+import { UseGuards } from '@nestjs/common'
+import { AuthGuard } from 'src/shared/guards/auth.guard'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -43,8 +45,10 @@ export class UserResolver {
   //   return this.userService.findOne(id)
   // }
 
+  @UseGuards(AuthGuard)
   @Query(() => UserResponse, { name: 'getUser' })
   async findOne(
+    @Context() context,
     @Args('id', { type: () => String }) id: string
   ): Promise<UserResponse> {
     try {

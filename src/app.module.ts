@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { join } from 'path'
@@ -8,7 +8,9 @@ import { SupplierModule } from './modules/supplier/supplier.module'
 import { CategoryModule } from './modules/category/category.module'
 
 import { ConfigModule } from '@nestjs/config'
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from './modules/user/user.module'
+import { AuthMiddleware } from './shared/services/auth.service'
+import { SharedModule } from './shared/shared.module'
 
 @Module({
   imports: [
@@ -18,14 +20,21 @@ import { UserModule } from './modules/user/user.module';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql')
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context: ({ req }) => ({ user: req['user'] })
     }),
     ProductModule,
     SupplierModule,
     CategoryModule,
-    UserModule
+    UserModule,
+    SharedModule
   ],
 
   providers: []
 })
-export class AppModule {}
+// export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*')
+  }
+}
