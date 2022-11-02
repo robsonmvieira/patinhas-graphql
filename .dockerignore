@@ -1,0 +1,8 @@
+node_modules
+.history
+.devContainer
+.git
+dist
+docker-compose.yaml
+Dockerfile.dev
+Dockerfile.prod

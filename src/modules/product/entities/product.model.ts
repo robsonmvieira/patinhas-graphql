@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Category } from '@prisma/client'
+
 import { ModelBase } from 'src/core/base-classes/graph.base'
-import { CategoryModel } from 'src/modules/category/entities'
+import { Category, CategoryModel } from 'src/modules/category/entities'
 import { SupplierModel } from 'src/modules/supplier/entities'
 
 @ObjectType()

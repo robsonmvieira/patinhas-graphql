@@ -11,10 +11,14 @@ import {
 import { BaseResponse } from 'src/shared/dtos'
 
 import { UniqueID } from 'src/core/value-objects'
+// import { AmqpConnection } from '@golevelup/nestjs-rabbitmq'
 
 @Resolver(() => Supplier)
 export class SupplierResolver {
-  constructor(private supplierService: SupplierService) {}
+  constructor(
+    // private amqp: AmqpConnection,
+    private supplierService: SupplierService
+  ) {}
 
   @Mutation(() => BaseResponse, { name: 'newSupplier' })
   async createSupplier(
@@ -23,6 +27,7 @@ export class SupplierResolver {
     try {
       const supplier = Supplier.create(createSupplierInput).getResult().toJSON()
       const { ok, error } = await this.supplierService.create(supplier)
+      // this.amqp.publish('amq.direct', 'supplier-created', supplier)
       return { ok, error }
     } catch (error) {
       return { ok: false, error: error.message }
